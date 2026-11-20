@@ -3,6 +3,7 @@ package com.mazo.ayna.offline
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import com.mazo.ayna.core.aynaPrefsDataStore
+import com.mazo.ayna.licensing.KnowledgeBundleResponse
 
 /**
  * Thin layer over [OfflineBank] for callers: plain-text answers and
