@@ -90,6 +90,6 @@ object ReminderNotifier {
         nm.notify(SystemClock.uptimeMillis().toInt(), notification)
         // Speak it too.
         val voice = AynaVoice(context)
-        voice.init { voice.speak("Yaad dila rahi hoon: $note") }
+        voice.speakAsync("Yaad dila rahi hoon: $note")
     }
 }
