@@ -27,6 +27,7 @@ class Prefs(private val context: Context) {
         val ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
         val INSTALL_TIME = longPreferencesKey("install_time")
         val WAKE_WORD_ENABLED = booleanPreferencesKey("wake_word_enabled")
+        val PERMISSIONS_PROMPTED = booleanPreferencesKey("permissions_prompted")
         val OVERLAY_ENABLED = booleanPreferencesKey("overlay_enabled")
         val LANGUAGE = stringPreferencesKey("language")
         val KNOWLEDGE_BUNDLE_VERSION = intPreferencesKey("knowledge_bundle_version")
