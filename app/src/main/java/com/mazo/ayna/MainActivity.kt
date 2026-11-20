@@ -93,7 +93,6 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         const val EXTRA_WAKE_WORD = "wake_word"
-        private const val PERMISSIONS_PROMPTED_KEY = "permissions_prompted"
         private const val DEFAULT_LANGUAGE = "Roman Urdu"
     }
 
@@ -391,8 +390,8 @@ class MainActivity : ComponentActivity() {
     /** Overlay bubble + AccessibilityService are optional but unlock the full
      *  hands-free experience. Asked once (tracked in prefs), never forced. */
     private suspend fun maybePromptOverlayAndAccessibility() {
-        if (prefs.getBoolean(PERMISSIONS_PROMPTED_KEY, false)) return
-        prefs.setBoolean(PERMISSIONS_PROMPTED_KEY, true)
+        if (prefs.getBoolean(Prefs.PERMISSIONS_PROMPTED, false)) return
+        prefs.setBoolean(Prefs.PERMISSIONS_PROMPTED, true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
             startActivity(
                 Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
