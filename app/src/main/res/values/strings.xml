@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ayna</string>
+    <string name="ayna_tagline">AI Voice Assistant</string>
+    <string name="listening">Listening…</string>
+    <string name="tap_to_talk">Tap the mic and speak</string>
+    <string name="chip_whatsapp">WhatsApp</string>
+    <string name="chip_call">Call</string>
+    <string name="chip_reminder">Reminder</string>
+
+    <!-- Chat -->
+    <string name="chat_button">Chat</string>
+    <string name="ayna_chat_hint">Ayna ko kuch likhein…</string>
+    <string name="ayna_typing">Ayna likh rahi hai…</string>
+    <string name="ayna_offline">Internet nahi hai abhi, Babe — thori dair mein phir baat karte hain ❤️</string>
+    <string name="ayna_voice_pending">Ayna ki awaz ke liye Gemini key chahiye — Settings mein key dalein</string>
+    <string name="ayna_first_greeting">Heyyy %1$s! 🥰 Main Ayna hoon — aap se mil kar bohat khushi hui. Aap ka din kaisa raha?</string>
+
+    <!-- Intro / onboarding -->
+    <string name="intro_branding_made_by">Made by Maaz Arif</string>
+    <string name="intro_branding_company">Product of Mazo Company</string>
+    <string name="intro_name_title">Hey handsome! ❤️ What should I call you?</string>
+    <string name="intro_name_hint">Aap ka naam likhein</string>
+    <string name="intro_name_continue">Continue</string>
+    <string name="intro_greeting">Assalam-o-Alaikum, main Ayna hoon</string>
+    <string name="intro_greeting_sub">Aap ki apni AI voice assistant</string>
+    <string name="intro_made_by_title">Who Created Ayna?</string>
+    <string name="intro_made_by_body">Ayna was created by Maaz Arif — a Product of Mazo Company</string>
+    <string name="intro_features_title">Main kya kya kar sakti hoon?</string>
+    <string name="intro_features_body">WhatsApp message bhejna, call accept ya reject karna, SMS bhejna, reminders lagana, mausam aur taleem ki maloomat — aur har baat, kaam se le kar pyaar tak — sab kuch sirf bol kar.</string>
+    <string name="intro_permissions_title">Permissions</string>
+    <string name="intro_permissions_body">Ayna ko mic, screen ke upar dikhna, aur WhatsApp mein madad ke liye permissions chahiye. Aap ki baatein sirf aap ki rehti hain.</string>
+    <string name="intro_start">Shuru karein</string>
+    <string name="intro_next">Aagay</string>
+    <string name="intro_skip">Skip</string>
+
+    <!-- Licence / trial / payment — Maaz's exact details -->
+    <string name="trial_title">10 din free trial</string>
+    <string name="trial_body">Ayna 10 din tak bilkul free hai. Us ke baad sirf ek dafa Rs 300 — phir Ayna hamesha ke liye aap ki.</string>
+    <string name="pay_title">Ayna hamesha ke liye lein — Rs 300</string>
+    <string name="pay_body">Neeche diye gaye Easypaisa number par Rs 300 bhej dein, phir transaction ID yahan likh kar submit karein. Verify hote hi Ayna permanent unlock ho jaye gi. Ek payment, hamesha ke liye.</string>
+    <string name="pay_easypaisa_label">Easypaisa number</string>
+    <string name="pay_easypaisa_number">0308 9303647</string>
+    <string name="pay_account_name_label">Account name</string>
+    <string name="pay_account_name">Maaz Arif</string>
+    <string name="pay_amount_label">Amount</string>
+    <string name="pay_amount">Rs 300 (one-time)</string>
+    <string name="pay_copy_number">Number copy karein</string>
+    <string name="pay_txn_label">Transaction ID</string>
+    <string name="pay_txn_hint">Easypaisa transaction ID likhein</string>
+    <string name="pay_attach_screenshot">Screenshot lagayein (optional)</string>
+    <string name="pay_submit">Submit karein</string>
+    <string name="pay_pending">Aap ki payment verify ho rahi hai. Thori dair mein Ayna unlock ho jaye gi.</string>
+    <string name="pay_unlocked">Mubarak! Ayna ab hamesha ke liye aap ki hai.</string>
+    <string name="pay_trial_days_left">Trial ke %1$d din baqi hain</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_gemini_key">Gemini API key (free)</string>
+    <string name="settings_gemini_hint">Apni free Gemini API key yahan daalein — key sirf aap ke phone mein rehti hai</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_wake_word">Wake word: "Ayna"</string>
+
+    <!-- Services -->
+    <string name="accessibility_service_label">Ayna — WhatsApp helper</string>
+    <string name="accessibility_service_desc">Ayna ko WhatsApp mein message bhejne aur calls handle karne mein madad karti hai.</string>
+    <string name="notification_wake_word">Ayna sun rahi hai</string>
+    <string name="notification_reminder">Reminder</string>
+
+    <string name="error_no_internet">Internet nahi hai — offline maloomat dikha rahi hoon</string>
+    <string name="error_generic">Kuch ghalat ho gaya, dobara koshish karein</string>
+
+    <!-- MainActivity: mic + two-turn voice flows + payment -->
+    <string name="mic_permission_needed">Mic ki permission dein, phir bol kar bataein</string>
+    <string name="speech_not_available">Is phone par speech recognition available nahi hai</string>
+    <string name="did_not_hear">Sunaai nahi diya — dobara bolain</string>
+    <string name="ask_contact_name">Kis ko message bhejna hai? Naam bataein</string>
+    <string name="ask_contact_name_call">Kis ko call karna hai? Naam bataein</string>
+    <string name="ask_message_text">Message kya bhejna hai?</string>
+    <string name="ask_reminder_text">Reminder kya hai? Bata dein</string>
+    <string name="whatsapp_sent">WhatsApp message bhej diya hai</string>
+    <string name="whatsapp_failed">Contact nahi mila — WhatsApp khol diya hai, aap khud chat select kar lein</string>
+    <string name="reminder_set_1h">Theek hai, 1 ghante baad yaad dila doon gi</string>
+    <string name="call_placed">%1$s ko WhatsApp call laga raha hoon</string>
+    <string name="call_failed">%1$s ko call nahi lag saki — contact ya Accessibility check karein</string>
+    <string name="number_copied">Easypaisa number copy ho gaya</string>
+    <string name="payment_submit_failed">Payment submit nahi hui — internet check kar ke dobara koshish karein</string>
+    <string name="payment_rejected">Payment verify nahi hui. Transaction ID dobara check kar ke submit karein</string>
+</resources>

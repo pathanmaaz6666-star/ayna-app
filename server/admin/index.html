@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayna Admin — Maaz only</title>
+<style>
+  :root { --bg:#12061F; --surface:#241040; --card:#2D1548; --primary:#A855F7;
+    --secondary:#8B5CF6; --accent:#EC4899; --text:#FFFFFF; --muted:#B8A9D9; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text);
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+  .wrap { max-width:900px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { margin:0 0 4px; font-size:28px; }
+  .sub { color:var(--muted); margin:0 0 24px; }
+  .card { background:var(--card); border:1px solid #3d2364; border-radius:12px;
+    padding:20px; margin-bottom:16px; }
+  label { display:block; color:var(--muted); font-size:13px; margin:12px 0 4px; }
+  input, textarea, select { width:100%; padding:10px 12px; border-radius:8px;
+    border:1px solid #3d2364; background:var(--surface); color:var(--text);
+    font-size:15px; }
+  button { background:var(--primary); color:#fff; border:0; border-radius:8px;
+    padding:10px 18px; font-size:15px; cursor:pointer; margin-top:14px; }
+  button.secondary { background:var(--surface); border:1px solid #3d2364; }
+  button.danger { background:#7f1d3a; }
+  button:disabled { opacity:.5; cursor:default; }
+  .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .tabs button { margin-top:0; }
+  .tabs button.active { background:var(--accent); }
+  .note { background:#2a1040; border:1px solid var(--accent); border-radius:8px;
+    padding:12px 14px; color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .note b { color:var(--text); }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:8px 6px; border-bottom:1px solid #3d2364;
+    vertical-align:top; }
+  th { color:var(--muted); font-weight:600; }
+  .stat { display:inline-block; background:var(--surface); border:1px solid #3d2364;
+    border-radius:10px; padding:14px 18px; margin:0 12px 12px 0; min-width:130px; }
+  .stat b { display:block; font-size:26px; }
+  .stat span { color:var(--muted); font-size:13px; }
+  .msg { color:var(--accent); min-height:20px; margin-top:10px; }
+  .row { display:flex; gap:12px; flex-wrap:wrap; }
+  .row > div { flex:1; min-width:140px; }
+  .hidden { display:none; }
+  .mono { font-family:ui-monospace,Menlo,monospace; font-size:13px;
+    word-break:break-all; }
+  .logout { float:right; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Ayna Admin</h1>
+  <p class="sub">Licence, payment aur knowledge control — sirf Maaz ke liye.</p>
+
+  <!-- ============ LOGIN ============ -->
+  <div id="login-view">
+    <div class="note"><b>Maaz only.</b> Ye panel sirf Ayna ke malik ke liye hai.
+      Login ke liye apna number (0308 9303647) dalein — 6-digit OTP usi number
+      par SMS se aayega. Token sirf is browser tab ki memory mein rehta hai,
+      kabhi save nahi hota.</div>
+    <div class="card">
+      <label for="phone">Mobile number</label>
+      <input id="phone" type="tel" value="0308 9303647" autocomplete="tel">
+      <button id="send-otp">Send OTP</button>
+      <label for="code">6-digit OTP</label>
+      <input id="code" type="text" inputmode="numeric" maxlength="6"
+        placeholder="______" autocomplete="one-time-code">
+      <button id="verify-otp">Login</button>
+      <div class="msg" id="login-msg"></div>
+    </div>
+  </div>
+
+  <!-- ============ DASHBOARD ============ -->
+  <div id="dash-view" class="hidden">
+    <div class="tabs">
+      <button data-tab="overview" class="active">Overview</button>
+      <button data-tab="payments">Payments</button>
+      <button data-tab="devices">Devices</button>
+      <button data-tab="config">Config</button>
+      <button data-tab="knowledge">Knowledge</button>
+      <button id="logout" class="secondary logout">Logout</button>
+    </div>
+
+    <div id="tab-overview" class="tab">
+      <div class="card"><div id="stats"></div></div>
+    </div>
+
+    <div id="tab-payments" class="tab hidden">
+      <div class="card">
+        <label for="pay-filter">Filter</label>
+        <select id="pay-filter">
+          <option value="">All payments</option>
+          <option value="pending_verification" selected>Pending verification</option>
+          <option value="verified">Verified</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <div id="payments-list"></div>
+      </div>
+    </div>
+
+    <div id="tab-devices" class="tab hidden">
+      <div class="card"><div id="devices-list"></div></div>
+    </div>
+
+    <div id="tab-config" class="tab hidden">
+      <div class="card">
+        <div class="row">
+          <div><label for="cfg-trial">Trial days (free)</label>
+            <input id="cfg-trial" type="number" min="1" max="365"></div>
+          <div><label for="cfg-price">Price (Rs, one-time)</label>
+            <input id="cfg-price" type="number" min="0"></div>
+          <div><label for="cfg-minver">Min app version</label>
+            <input id="cfg-minver" type="number" min="1"></div>
+        </div>
+        <button id="save-config">Save config</button>
+        <div class="msg" id="config-msg"></div>
+      </div>
+    </div>
+
+    <div id="tab-knowledge" class="tab hidden">
+      <div class="card">
+        <h3 style="margin-top:0">Add / edit knowledge</h3>
+        <input id="k-id" type="hidden">
+        <div class="row">
+          <div><label for="k-category">Category</label><input id="k-category"></div>
+          <div><label for="k-language">Language</label><input id="k-language"
+            placeholder="Roman Urdu / Urdu / English"></div>
+        </div>
+        <label for="k-keywords">Keywords (comma separated)</label>
+        <input id="k-keywords" placeholder="namaz, wazu, roza">
+        <label for="k-question">Question</label><input id="k-question">
+        <label for="k-answer">Answer</label><textarea id="k-answer" rows="4"></textarea>
+        <button id="save-knowledge">Save &amp; publish bundle</button>
+        <button id="clear-knowledge" class="secondary">Clear form</button>
+        <div class="msg" id="knowledge-msg"></div>
+      </div>
+      <div class="card"><div id="knowledge-list"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+// Token lives in memory ONLY — never localStorage / sessionStorage.
+let adminToken = null;
+const $ = id => document.getElementById(id);
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, {
+    ...opts,
+    headers: { "Content-Type": "application/json",
+      ...(adminToken ? { "X-Admin-Token": adminToken } : {}),
+      ...(opts.headers || {}) },
+  });
+  let data = {};
+  try { data = await res.json(); } catch (_) { /* empty body */ }
+  if (!res.ok) throw new Error(data.detail || ("HTTP " + res.status));
+  return data;
+}
+const esc = s => String(s ?? "").replace(/[&<>"']/g,
+  c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+// ---------- Login ----------
+$("send-otp").onclick = async () => {
+  $("login-msg").textContent = "OTP bhej rahe hain…";
+  try {
+    await api("/api/v1/admin/request-otp",
+      { method: "POST", body: JSON.stringify({ phone: $("phone").value.trim() }) });
+    $("login-msg").textContent = "Agar number registered hai to OTP SMS par aa gaya hoga.";
+  } catch (e) { $("login-msg").textContent = e.message; }
+};
+
+$("verify-otp").onclick = async () => {
+  $("login-msg").textContent = "Verifying…";
+  try {
+    const data = await api("/api/v1/admin/verify-otp", { method: "POST",
+      body: JSON.stringify({ phone: $("phone").value.trim(),
+        code: $("code").value.trim() }) });
+    adminToken = data.token;
+    $("login-view").classList.add("hidden");
+    $("dash-view").classList.remove("hidden");
+    loadOverview(); loadPayments(); loadDevices(); loadConfig(); loadKnowledge();
+  } catch (e) { $("login-msg").textContent = e.message; }
+};
+
+$("logout").onclick = () => {
+  adminToken = null;
+  $("dash-view").classList.add("hidden");
+  $("login-view").classList.remove("hidden");
+  $("code").value = "";
+  $("login-msg").textContent = "";
+};
+
+// ---------- Tabs ----------
+document.querySelectorAll(".tabs [data-tab]").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".tabs [data-tab]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
+    $("tab-" + btn.dataset.tab).classList.remove("hidden");
+  };
+});
+
+// ---------- Overview ----------
+async function loadOverview() {
+  try {
+    const o = await api("/api/v1/admin/overview");
+    $("stats").innerHTML =
+      `<div class="stat"><b>${o.devices}</b><span>Total devices</span></div>
+       <div class="stat"><b>${o.paid_devices}</b><span>Paid (unlocked)</span></div>
+       <div class="stat"><b>${o.pending_payments}</b><span>Pending payments</span></div>
+       <div class="stat"><b>${o.verified_payments}</b><span>Verified payments</span></div>`;
+  } catch (e) { $("stats").textContent = e.message; }
+}
+
+// ---------- Payments ----------
+async function loadPayments() {
+  const filter = $("pay-filter").value;
+  try {
+    const data = await api("/api/v1/admin/payments" + (filter ? "?status=" + filter : ""));
+    if (!data.payments.length) { $("payments-list").innerHTML = "<p>No payments.</p>"; return; }
+    $("payments-list").innerHTML = "<table><tr><th>ID</th><th>Device</th><th>Txn ID</th>" +
+      "<th>Status</th><th>Created</th><th></th></tr>" + data.payments.map(p =>
+      `<tr><td>${p.id}</td><td class="mono">${esc(p.device_id)}</td>
+       <td class="mono">${esc(p.txn_id)}</td><td>${esc(p.status)}</td>
+       <td>${esc(p.created_at)}</td><td>` +
+      (p.status === "pending_verification"
+        ? `<button data-verify="${p.id}">Verify</button>
+           <button class="danger" data-reject="${p.id}">Reject</button>` : "") +
+      "</td></tr>").join("") + "</table>";
+    document.querySelectorAll("[data-verify]").forEach(b => b.onclick = () => decide(b.dataset.verify, "verify"));
+    document.querySelectorAll("[data-reject]").forEach(b => b.onclick = () => decide(b.dataset.reject, "reject"));
+  } catch (e) { $("payments-list").textContent = e.message; }
+}
+async function decide(id, decision) {
+  try {
+    await api("/api/v1/admin/payments/" + id + "/verify",
+      { method: "POST", body: JSON.stringify({ decision }) });
+    loadPayments(); loadOverview();
+  } catch (e) { alert(e.message); }
+}
+$("pay-filter").onchange = loadPayments;
+
+// ---------- Devices ----------
+async function loadDevices() {
+  try {
+    const data = await api("/api/v1/admin/devices");
+    if (!data.devices.length) { $("devices-list").innerHTML = "<p>No devices yet.</p>"; return; }
+    $("devices-list").innerHTML = "<table><tr><th>Device</th><th>Status</th>" +
+      "<th>Trial started</th><th>Activated</th></tr>" + data.devices.map(d =>
+      `<tr><td class="mono">${esc(d.device_id)}</td><td>${esc(d.status)}</td>
+       <td>${esc(d.trial_started_at)}</td><td>${esc(d.activated_at || "—")}</td></tr>`
+      ).join("") + "</table>";
+  } catch (e) { $("devices-list").textContent = e.message; }
+}
+
+// ---------- Config ----------
+async function loadConfig() {
+  try {
+    const c = await api("/api/v1/config");
+    $("cfg-trial").value = c.trial_days;
+    $("cfg-price").value = c.price_pkr;
+    $("cfg-minver").value = c.min_version;
+  } catch (e) { $("config-msg").textContent = e.message; }
+}
+$("save-config").onclick = async () => {
+  try {
+    await api("/api/v1/config", { method: "PUT", body: JSON.stringify({
+      trial_days: parseInt($("cfg-trial").value, 10),
+      price_pkr: parseInt($("cfg-price").value, 10),
+      min_version: parseInt($("cfg-minver").value, 10) }) });
+    $("config-msg").textContent = "Config saved.";
+  } catch (e) { $("config-msg").textContent = e.message; }
+};
+
+// ---------- Knowledge ----------
+async function loadKnowledge() {
+  try {
+    const data = await api("/api/v1/admin/knowledge");
+    const live = data.knowledge.filter(k => !k.deleted);
+    if (!live.length) { $("knowledge-list").innerHTML = "<p>No knowledge entries yet.</p>"; return; }
+    $("knowledge-list").innerHTML = "<table><tr><th>ID</th><th>Category</th>" +
+      "<th>Language</th><th>Question</th><th>Ver</th><th></th></tr>" + live.map(k =>
+      `<tr><td>${k.id}</td><td>${esc(k.category)}</td><td>${esc(k.language)}</td>
+       <td>${esc(k.question)}</td><td>${k.version}</td>
+       <td><button data-edit="${k.id}">Edit</button>
+           <button class="danger" data-del="${k.id}">Delete</button></td></tr>`
+      ).join("") + "</table>";
+    document.querySelectorAll("[data-edit]").forEach(b => b.onclick = async () => {
+      const k = data.knowledge.find(x => x.id == b.dataset.edit);
+      $("k-id").value = k.id; $("k-category").value = k.category;
+      $("k-language").value = k.language;
+      $("k-keywords").value = (k.keywords || []).join(", ");
+      $("k-question").value = k.question; $("k-answer").value = k.answer;
+      window.scrollTo(0, 0);
+    });
+    document.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
+      const k = data.knowledge.find(x => x.id == b.dataset.del);
+      if (!confirm("Delete this entry?")) return;
+      await api("/api/v1/admin/knowledge", { method: "POST",
+        body: JSON.stringify({ ...k, deleted: true }) });
+      loadKnowledge();
+    });
+  } catch (e) { $("knowledge-list").textContent = e.message; }
+}
+$("save-knowledge").onclick = async () => {
+  const body = {
+    category: $("k-category").value.trim(),
+    language: $("k-language").value.trim(),
+    keywords: $("k-keywords").value.split(",").map(s => s.trim()).filter(Boolean),
+    question: $("k-question").value.trim(),
+    answer: $("k-answer").value.trim(),
+  };
+  const id = $("k-id").value;
+  if (id) body.id = parseInt(id, 10);
+  try {
+    const res = await api("/api/v1/admin/knowledge",
+      { method: "POST", body: JSON.stringify(body) });
+    $("knowledge-msg").textContent = "Saved. Bundle version is now " + res.version + ".";
+    $("k-id").value = "";
+    loadKnowledge();
+  } catch (e) { $("knowledge-msg").textContent = e.message; }
+};
+$("clear-knowledge").onclick = () => {
+  ["k-id", "k-category", "k-language", "k-keywords", "k-question", "k-answer"]
+    .forEach(id => $(id).value = "");
+  $("knowledge-msg").textContent = "";
+};
+</script>
+</body>
+</html>

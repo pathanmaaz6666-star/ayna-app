@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Ayna" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/ayna_bg</item>
+        <item name="android:statusBarColor">@color/ayna_bg</item>
+        <item name="android:navigationBarColor">@color/ayna_bg</item>
+        <item name="android:textColor">@color/ayna_text</item>
+        <item name="android:textColorHint">@color/ayna_muted</item>
+    </style>
+</resources>
