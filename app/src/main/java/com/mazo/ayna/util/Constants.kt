@@ -39,5 +39,5 @@ object Constants {
     const val WHATSAPP_BUSINESS_PACKAGE = "com.whatsapp.w4b"
 
     /** Gemini model used by the REST brain (free tier). */
-    const val GEMINI_MODEL = "gemini-1.5-flash"
+    const val GEMINI_MODEL = "gemini-2.5-flash"
 }
