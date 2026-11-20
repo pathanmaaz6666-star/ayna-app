@@ -21,7 +21,7 @@ sealed class CommandResult {
 
 /**
  * Routes a transcribed voice command to the right action:
- * offline bank first (fast + free), then Gemini when online.
+ * Gemini brain first when online (smart answers), offline bank only as fallback when there is no key / no internet / Gemini fails.
  * WhatsApp / SMS / calls / reminders are executed on-device.
  *
  * Honest limits (also documented in README):
@@ -115,8 +115,15 @@ class VoiceCommandRouter(
             return
         }
 
-        // --- Offline bank first (fast, free, works without data) ---
+        // --- Online brain FIRST (smart answers) ---
         scope.launch(Dispatchers.IO) {
+            val language = prefs.getString(Prefs.LANGUAGE, "Roman Urdu")
+            val reply = brain.answer(text, language)
+            if (reply != null) {
+                onResult(CommandResult.Spoken(reply))
+                return@launch
+            }
+            // --- Offline bank fallback (no key / no internet / Gemini failed) ---
             // Make sure the in-memory cache is warm (seed runs in background
             // on first launch, so the cache may still be empty).
             runCatching { offlineBank.refreshCache() }
@@ -125,19 +132,12 @@ class VoiceCommandRouter(
                 onResult(CommandResult.Spoken(local.answer))
                 return@launch
             }
-            // --- Online brain ---
-            val language = prefs.getString(Prefs.LANGUAGE, "Roman Urdu")
-            val reply = brain.answer(text, language)
-            if (reply != null) {
-                onResult(CommandResult.Spoken(reply))
-            } else {
-                onResult(
-                    CommandResult.Spoken(
-                        "Internet nahi hai aur is sawal ka jawab mere offline bank mein nahi hai. " +
-                            "Data on karein ya apni Gemini API key Settings mein daalein, phir main jawab de sakoon gi."
-                    )
+            onResult(
+                CommandResult.Spoken(
+                    "Internet nahi hai aur is sawal ka jawab mere offline bank mein nahi hai. " +
+                        "Data on karein ya apni Gemini API key Settings mein daalein, phir main jawab de sakoon gi."
                 )
-            }
+            )
         }
     }
 }
