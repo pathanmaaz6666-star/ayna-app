@@ -5,9 +5,18 @@ permissions:
   contents: write
 jobs:
   extract:
+    permissions:
+      contents: write
+      workflows: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Show build workflow content
+        run: |
+          unzip -o ayna-app-code-v5-github.zip ayna-app/.github/workflows/build-apk.yml
+          echo "---BUILD-APK-YML-START---"
+          cat ayna-app/.github/workflows/build-apk.yml
+          echo "---BUILD-APK-YML-END---"
       - name: Unzip and move project to repo root
         run: |
           unzip -o ayna-app-code-v5-github.zip
